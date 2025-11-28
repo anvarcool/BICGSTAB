@@ -8,7 +8,7 @@ Vector::Vector(): values_(nullptr), len_(0)
 
 Vector::Vector(int n): len_(n)
 {
-    values_ = new double[len_];
+    values_ = new double[len_]();
 }
 
 Vector::Vector(int n, double* values):
@@ -91,7 +91,7 @@ Matrix::Matrix(): values_(nullptr), n_cols_(0), n_rows_(0)
 
 Matrix::Matrix(int n_cols, int n_rows): n_cols_(n_cols), n_rows_(n_rows)
 {
-    values_ = new double[n_cols * n_rows];
+    values_ = new double[n_cols * n_rows]();
 }
 
 Matrix::Matrix(const Matrix& m)
