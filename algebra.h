@@ -1,56 +1,42 @@
 #pragma once
 #include <iostream>
 
-class Vector {
+class Vector{
 private:
-    double* values;
-    int len;
+    double* values_;
+    int len_;
 
 public:
     Vector();
     Vector(int l);
-    Vector(const Vector& v);  
-
-    ~Vector();
-
-    int get_size() const;
+    Vector(int n, double values[]);
+    Vector(const Vector& v);
     double* get_values() const;
-
-    Vector& operator=(const Vector& v);     
-    Vector operator+(const Vector& v) const;
-    Vector operator-(const Vector& v) const;
-    double operator*(const Vector& v) const;
-
-    double& operator[](int i);
-    const double& operator[](int i) const; 
-
-    friend Vector operator*(double a, const Vector& v);
-    friend std::ostream& operator<<(std::ostream& os, const Vector& v);
+    int get_size() const;
+    Vector& operator=(const Vector& v);  
+    Vector operator + (const Vector& v);
+    Vector operator - (const Vector& v);
+    double& operator [](int i) const;
+    double operator *(const Vector& v);
+    friend Vector operator *(double a, const Vector& v);
+    ~Vector();
 };
 
-
-class Matrix {
+class Matrix{
 private:
-    double* values;
-    int n_cols;
-    int n_rows;
+    double* values_;
+    int n_cols_;
+    int n_rows_;
 
 public:
     Matrix();
-    Matrix(int n_cols, int n_rows);
-    Matrix(const Matrix& m);   
-
-    ~Matrix();
-
+    Matrix(int n_rows, int n_cols);
+    Matrix(const Matrix& m);
+    double* get_values() const;
     int get_n_cols() const;
     int get_n_rows() const;
-    double* get_values() const;
-    
-    Matrix& operator=(const Matrix& m);
-
     double& operator()(int i, int j);
-    const double& operator()(int i, int j) const;
-
-    Vector operator*(const Vector& x) const;
-    friend std::ostream& operator<<(std::ostream& os, const Matrix& m);
+    Vector operator *(const Vector& v);
+    Matrix& operator=(const Matrix& m);
+    ~Matrix();
 };
