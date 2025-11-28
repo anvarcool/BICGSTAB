@@ -84,6 +84,12 @@ Vector operator *(double a, const Vector& v){
     return res;
 }
 
+std::ostream& operator << (std::ostream &os, const Vector& v){
+    for (int i=0; i < v.get_size(); i++)
+        os << v[i] << ' ';
+    return os;
+}
+
 
 
 Matrix::Matrix(): values_(nullptr), n_cols_(0), n_rows_(0)
@@ -128,7 +134,7 @@ int Matrix::get_n_rows() const{
     return n_rows_;
 }
 
-double& Matrix::operator()(int i, int j){
+double& Matrix::operator()(int i, int j) const{
     return *(values_ + n_cols_ * i + j);
 }
 
@@ -142,6 +148,16 @@ Vector Matrix::operator *(const Vector& v){
     }
     return res;
 }
+
+std::ostream& operator << (std::ostream &os, const Matrix& m){
+    for (int i = 0; i < m.get_n_rows(); i++){
+        for (int j = 0; j < m.get_n_cols(); j++)
+            os << m(i, j) << ' ';
+        os << endl;
+    }
+    return os;
+}
+
 Vector::~Vector(){
     delete[] values_;
 }

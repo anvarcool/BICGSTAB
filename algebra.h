@@ -13,12 +13,13 @@ public:
     Vector(const Vector& v);
     double* get_values() const;
     int get_size() const;
-    Vector& operator=(const Vector& v);  
+    Vector& operator=(const Vector& v);
     Vector operator + (const Vector& v);
     Vector operator - (const Vector& v);
     double& operator [](int i) const;
     double operator *(const Vector& v);
     friend Vector operator *(double a, const Vector& v);
+    friend std::ostream& operator << (std::ostream &os, const Vector& v);
     ~Vector();
 };
 
@@ -35,8 +36,9 @@ public:
     double* get_values() const;
     int get_n_cols() const;
     int get_n_rows() const;
-    double& operator()(int i, int j);
+    double& operator()(int i, int j) const;
     Vector operator *(const Vector& v);
     Matrix& operator=(const Matrix& m);
+    friend std::ostream& operator << (std::ostream &os, const Matrix& m);
     ~Matrix();
 };
