@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     MPI_Barrier(MPI_COMM_WORLD);
 
     while(continue_iteration){
-        iter += 1
+        iter += 1;
         double beta, rho_new;
         Vector v_loc;
 
@@ -128,11 +128,11 @@ int main(int argc, char** argv)
             r = s - omega * t;
             rho = rho_new;
             // Критерий остановки
-            if (r * r) / (b * b) < epsilon{
+            if ((r * r) / (b * b) < epsilon){
                 continue_iteration = false;
             }
 
-            if iter >= max_iter{
+            if (iter >= max_iter){
                 continue_iteration = false;
                 cout << "Метод не сошелся за " << max_iter << "Итераций" << endl;
             }
