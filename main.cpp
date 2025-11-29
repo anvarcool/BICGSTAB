@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <fstream>
 #include "algebra.h"
 #include "generate_system.h"
 #include <mpi.h>
@@ -181,6 +182,7 @@ int main(int argс, char** argv)
         cout << "============================\n\n";
         ofstream out("result.txt");
         out << x;
+        out.close();
     }
 
 
