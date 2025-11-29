@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main(int argс, char** argv)
+int main(int argc, char** argv)
 {
     setlocale(LC_ALL, "Russian");
 
@@ -20,6 +20,31 @@ int main(int argс, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
     int N = 20000;
+
+    Matrix A;
+    Vector b, x_true;
+
+    if (world_rank == 0)
+    {
+        if (argc > 1 && string(argv[1]) == "-f"){
+            ifstream in_mat("A.txt");
+            ifstream in_vec("b.txt");
+            in_mat >> A;
+            in_mat.close();
+            in_vec >> b;
+            in_vec.close();
+            N = A.get_n_cols();
+            cout << "Got input from files";
+        }
+        else if (argc > 1 && string(argv[1]) == "-c"){
+            cin >> A;
+            cin >> b;
+            N = A.get_n_cols();
+            cout << "Got input from console";
+        }
+    }
+    
+    MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     int block_counts[world_size], block_index[world_size];
     int block_counts_2d[world_size], block_index_2d[world_size];
@@ -36,9 +61,7 @@ int main(int argс, char** argv)
     block_counts[world_size - 1] += N % world_size;
     block_counts_2d[world_size - 1] += (N % world_size) * N;
 
-    Matrix A;
     Matrix A_loc(N, block_counts[world_rank]);
-    Vector b, x_true;
     Vector r, r_0, p(N), v(N), x(N);
     double rho, alpha, omega, epsilon;
     int max_iter, iter;
@@ -53,22 +76,7 @@ int main(int argс, char** argv)
 
     if (world_rank == 0)
     {
-        cin >> "Введите режим формирования системы" >> endl >> "f - ввод из файла, c - ввод из консоли, g - случайная генерация" >> endl >> mode;
-        if (mode == 'f'){
-            ifstream in_mat("A.txt");
-            ifstream in_vec("b.txt");
-            in_mat >> A;
-            in_mat.close();
-            in_vec >> b;
-            in_vec.close();
-            cout << "Got input from files";
-        }
-        else if (mode == 'c'){
-            cin >> A;
-            cin >> b;
-            cout << "Got input from console";
-        }
-        else{
+        if(argc == 1){
             generate_system(N, A, b, x_true);
             cout << "Generated system";
         }
