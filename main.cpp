@@ -42,6 +42,7 @@ int main(int argс, char** argv)
     Vector r, r_0, p(N), v(N), x(N);
     double rho, alpha, omega, epsilon;
     int max_iter, iter;
+    char mode;
     rho = alpha = omega = 1;
     epsilon = 1e-6;
     max_iter = 10000;
@@ -52,7 +53,8 @@ int main(int argс, char** argv)
 
     if (world_rank == 0)
     {
-        if (argv[0] == "-f"){
+        cin >> "Введите режим формирования системы" >> endl >> "f - ввод из файла, c - ввод из консоли, g - случайная генерация" >> endl >> mode;
+        if (mode == 'f'){
             ifstream in_mat("A.txt");
             ifstream in_vec("b.txt");
             in_mat >> A;
@@ -61,7 +63,7 @@ int main(int argс, char** argv)
             in_vec.close();
             cout << "Got input from files";
         }
-        else if (argv[0] == "-c"){
+        else if (mode == 'c'){
             cin >> A;
             cin >> b;
             cout << "Got input from console";
