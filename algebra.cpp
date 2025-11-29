@@ -90,6 +90,15 @@ std::ostream& operator << (std::ostream &os, const Vector& v){
     return os;
 }
 
+std::istream& operator >> (std::istream& in, Vector& v){
+    int l;
+    in >> l;
+    v = Vector(l);
+    for (int i = 0; i < l; i++)
+        in >> v[i];
+    return in;
+}
+
 
 
 Matrix::Matrix(): values_(nullptr), n_cols_(0), n_rows_(0)
@@ -158,6 +167,16 @@ std::ostream& operator << (std::ostream &os, const Matrix& m){
     return os;
 }
 
+std::istream& operator >> (std::istream& in, Matrix& m){
+    int n_rows, n_cols;
+    in >> n_rows >> n_cols;
+    m = Matrix(n_rows, n_cols);
+    for (int i = 0; i < n_rows; i++)
+         for (int j = 0; j < n_cols; j++)
+        in >> m(i, j);
+    return in;
+}
+
 Vector::~Vector(){
     delete[] values_;
 }
@@ -165,3 +184,4 @@ Vector::~Vector(){
 Matrix::~Matrix(){
     delete[] values_;
 }
+

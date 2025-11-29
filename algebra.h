@@ -19,7 +19,8 @@ public:
     double& operator [](int i) const;
     double operator *(const Vector& v);
     friend Vector operator *(double a, const Vector& v);
-    friend std::ostream& operator << (std::ostream &os, const Vector& v);
+    friend std::ostream& operator << (std::ostream& os, const Vector& v);
+    friend std::istream& operator >> (std::istream& in, Vector& v);
     ~Vector();
 };
 
@@ -40,5 +41,6 @@ public:
     Vector operator *(const Vector& v);
     Matrix& operator=(const Matrix& m);
     friend std::ostream& operator << (std::ostream &os, const Matrix& m);
+    friend std::istream& operator >> (std::istream& in, Matrix& m);
     ~Matrix();
 };

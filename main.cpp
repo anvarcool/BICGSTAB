@@ -6,10 +6,10 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main(int argс, char** argv)
 {
     setlocale(LC_ALL, "Russian");
-    
+
     MPI_Init(NULL, NULL);
 
     int world_size;
@@ -51,7 +51,24 @@ int main(int argc, char** argv)
 
     if (world_rank == 0)
     {
-        generate_system(N, A, b, x_true);
+        if (argv[0] == "-f"){
+            ifstream in_mat("A.txt");
+            ifstream in_vec("b.txt");
+            in_mat >> A;
+            in_mat.close();
+            in_vec >> b;
+            in_vec.close();
+            cout << "Got input from files";
+        }
+        else if (argv[0] == "-c"){
+            cin >> A;
+            cin >> b;
+            cout << "Got input from console";
+        }
+        else{
+            generate_system(N, A, b, x_true);
+            cout << "Generated system";
+        }
         r = b - A * x;
         r_0 = r;
     }
@@ -162,6 +179,8 @@ int main(int argc, char** argv)
         cout << "Relative residual       : " << residual << endl;
         cout << "Execution time          : " << (time_end - time_start) << " sec\n";
         cout << "============================\n\n";
+        ofstream out("result.txt");
+        out << x;
     }
 
 
