@@ -1,5 +1,5 @@
 #include <iostream>
-#include <limits>
+#include <math.h>
 #include "algebra.h"
 #include "generate_system.h"
 #include <mpi.h>
@@ -8,6 +8,8 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    setlocale(LC_ALL, "Russian");
+    
     MPI_Init(NULL, NULL);
 
     int world_size;
@@ -16,7 +18,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    int N = 1003;
+    int N = 20000;
 
     int block_counts[world_size], block_index[world_size];
     int block_counts_2d[world_size], block_index_2d[world_size];
@@ -40,10 +42,12 @@ int main(int argc, char** argv)
     double rho, alpha, omega, epsilon;
     int max_iter, iter;
     rho = alpha = omega = 1;
-    epsilon = 0.001;
+    epsilon = 1e-6;
     max_iter = 10000;
     iter = 0;
     int continue_iteration = true;
+    double time_start = MPI_Wtime();
+
 
     if (world_rank == 0)
     {
@@ -127,7 +131,8 @@ int main(int argc, char** argv)
             x = x + omega * s + alpha * p;
             r = s - omega * t;
             rho = rho_new;
-            // Критерий остановки
+
+
             if ((r * r) / (b * b) < epsilon){
                 continue_iteration = false;
             }
@@ -141,6 +146,24 @@ int main(int argc, char** argv)
 
         MPI_Bcast(&continue_iteration, 1, MPI_INT, 0, MPI_COMM_WORLD);
     }
+
+    double time_end = MPI_Wtime();
+    if (world_rank == 0)
+    {
+        double residual = sqrt(r * r) / sqrt(b * b);
+
+        cout << "\n============================\n";
+        cout << "  MPI BiCGStab completed\n";
+        cout << "============================\n";
+        cout << "System size             : " << N << endl;
+        cout << "Number of processes     : " << world_size << endl;
+        cout << "Accuracy epsilon        : " << epsilon << endl;
+        cout << "Iterations              : " << iter << endl;
+        cout << "Relative residual       : " << residual << endl;
+        cout << "Execution time          : " << (time_end - time_start) << " sec\n";
+        cout << "============================\n\n";
+    }
+
 
     MPI_Finalize();
 }

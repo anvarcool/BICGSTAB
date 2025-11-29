@@ -20,15 +20,11 @@ void generate_system(int N, Matrix &A, Vector &b, Vector &x_true) {
 
 
     for (int i = 0; i < N; ++i) {
-    double sum = 0.0;
-    for (int j = 0; j < N; ++j) {
-        if (i != j) {
-            A(i,j) = (rand() % 10) / 2.0;
-            sum += std::abs(A(i,j));
-        }
+        for (int j = 0; j < N; ++j) 
+            A(i,j) = 1.0 / ((i-j)*(i-j) - 0.25);
+        
     }
-    A(i,i) = sum + 1.0;
-}
+
 
     for (int i = 0; i < N; ++i) {
         double s = 0.0;
